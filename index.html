@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Star Wars – Premium Edition v1.7.6</title>
+
+<style>
+:root {
+  --space-dark: #041b3d;
+  --card-bg: #0b253f;
+  --neon-blue: #00b4d8;
+  --pure-white: #ffffff;
+  --soft-blue: rgba(0, 180, 216, 0.15);
+  --gold: #ffc107;
+}
+
+
+body {
+  margin:0;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  background:#020c1b;
+  color:var(--pure-white);
+  display:flex;
+  justify-content:center;
+}
+
+
+.app {
+  width:100vw;
+  max-width:768px;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  background:var(--space-dark);
+}
+
+header {
+  text-align:center;
+  padding:20px 10px;
+  border-bottom:2px solid var(--neon-blue);
+}
+header h1 {
+  margin:0;
+  color:var(--neon-blue);
+  letter-spacing:4px;
+  font-size: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+}
+
+header h1 span.symbol {
+  color: var(--gold);
+  font-size: 24px;
+  text-shadow: 0 0 10px var(--gold);
+}
+.edition-text { font-size:14px; margin-top: 4px; }
+.version-text { font-size:10px; opacity: 0.5; margin-top: 2px; letter-spacing: 1px; }
+
+
+
+
+.top-buttons {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  padding:15px;
+}
+
+
+
+.top-buttons button {
+  background:#0f2f4f;
+  border:1px solid var(--neon-blue);
+  color:white;
+  padding:12px 5px;
+  font-size: 11px;
+  border-radius:6px;
+  cursor:pointer;
+  text-transform: uppercase;
+}
+
+
+.content {
+  flex-grow:1;
+  margin:15px;
+  background:var(--card-bg);
+  border:2px solid var(--neon-blue);
+  border-radius:15px;
+  padding:25px;
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  cursor:pointer;
+}
+
+
+
+.char-info {
+  display:flex;
+  justify-content:space-between;
+  font-size:12px;
+  color:var(--neon-blue);
+  border-bottom:1px solid rgba(0,180,216,0.2);
+  padding-bottom:8px;
+  text-transform: uppercase;
+}
+
+.card-body h3 { color:var(--pure-white); font-size:26px; margin:15px 0; }
+.card-body p { color:var(--pure-white); font-size:19px; line-height:1.4; margin: 10px 0; }
+
+
+
+#quizControls {
+  display: none;
+  gap: 20px;
+  justify-content: center;
+  margin: 25px 0;
+}
+.quiz-btn {
+  padding: 8px 25px;
+  border-radius: 20px;
+  border: 1px solid rgba(0, 180, 216, 0.5);
+  cursor: pointer;
+  font-size: 13px;
+  background: var(--soft-blue);
+  color: var(--neon-blue);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.nav-buttons {
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  padding:15px;
+}
+.nav-buttons button {
+  background:#123a63;
+  color:white;
+  border:none;
+  padding:15px;
+  border-radius:8px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.main-bottom { padding:0 15px 10px; }
+.main-bottom button {
+  width:100%;
+  background:var(--neon-blue);
+  color:#000;
+  padding:16px;
+  font-weight:bold;
+  border-radius:10px;
+  border: none;
+  cursor: pointer;
+  text-transform: uppercase;
+}
+
+footer {
+  text-align: center;
+  font-size: 10px;
+  padding: 10px;
+  opacity: 0.5;
+}
+
+#cardNumber { font-size:11px; opacity:0.5; margin-top: 10px; }
+</style>
+</head>
+
+
+
+<body>
+
+<div class="app">
+
+
+
+  <header>
+    <h1><span class="symbol">❂</span>STAR WARS<span class="symbol">❂</span></h1>
+    <div class="edition-text">Audio-Premium Edition</div>
+    <div class="version-text">Version 1.7.6 </div>
+  </header>
+
+
+
+
+
+  <div class="top-buttons">
+    <button onclick="setDeck('willkommen')">Start</button>
+    <button onclick="setDeck('helden')">Helden</button>
+    <button onclick="setDeck('nebendarsteller')">Nebenrollen</button>
+    <button onclick="setDeck('zitate')">Zitate</button>
+    <button onclick="setDeck('schlachten')">Schlachten</button>
+    <button onclick="setDeck('quiz')">Jedi-Test</button>
+  </div>
+
+
+
+
+  <div class="content" id="mainCard" onclick="handleCardClick()">
+
+
+
+
+    <div class="char-info">
+      <span id="leftInfo">INFO</span>
+      <span id="rightInfo">DETAIL</span>
+    </div>
+    <div class="card-body">
+      <h3 id="cardTitle">Systemstart</h3>
+      <p id="cardText">Wähle eine Kategorie.</p>
+ 
+
+
+
+     
+      <div id="quizControls">
+        <button class="quiz-btn" onclick="event.stopPropagation(); answerQuiz(true)">JA</button>
+        <button class="quiz-btn" onclick="event.stopPropagation(); answerQuiz(false)">NEIN</button>
+      </div>
+    </div>
+    <div id="cardNumber"></div>
+  </div>
+
+
+
+
+
+  <div class="nav-buttons">
+    <button onclick="event.stopPropagation(); prevCard()">⬅ zurück</button>
+    <button onclick="event.stopPropagation(); readCard()">🔊 vorlesen</button>
+    <button onclick="event.stopPropagation(); nextCard()">➡ vor</button>
+  </div>
+
+  <div class="main-bottom">
+    <button onclick="setDeck('philosophie')">Film, Fernsehen & Lehre</button>
+  </div>
+
+  <footer>(C) 2006 Audio Premium Edition Star Wars. Testversion darf nicht kommerziell verwendet werden.</footer>
+</div>
+
+<script>
+
+const decks = {
+
+  willkommen: [
+    {title:"Willkommen", text:"Willkommen zur Star Wars Lern-App. Hier beginnt deine Reise.", left:"Start", right:"Intro"},
+    {title:"Was ist Star Wars?", text:"Es ist ein märchenhaftes Weltraum-Abenteuer über Gut gegen Böse.", left:"Basis", right:"Einführung"},
+    {title:"Die Reihenfolge", text:"Wusstest du es? Der allererste Film von 1977 war eigentlich Teil 4 der Geschichte!", left:"Wissen", right:"Historie"},
+    {title:"Warum Teil 4?", text:"George Lucas begann mittendrin, weil die Technik für die ersten Teile noch nicht weit genug war.", left:"Fakt", right:"Regie"},
+    {title:"Episode IV", text:"Dieser Film heißt 'Eine neue Hoffnung' und zeigt Lukes ersten Kampf.", left:"Film", right:"Klassiker"},
+    {title:"Der Kern", text:"Im Zentrum steht die Familie Skywalker und ihr Schicksal in der Galaxis.", left:"Handlung", right:"Skywalker"},
+    {title:"Die Macht", text:"Ein mystisches Energiefeld, das einigen Menschen besondere Kräfte verleiht.", left:"Energie", right:"Die Macht"},
+    {title:"Jedi-Ritter", text:"Die Hüter des Friedens. Sie nutzen die helle Seite der Macht.", left:"Frieden", right:"Jedi"},
+    {title:"Die Sith", text:"Die Feinde der Jedi. Sie nutzen die dunkle Seite für ihre Machtgier.", left:"Böse", right:"Sith"},
+    {title:"Imperium", text:"Eine böse Regierung, die die ganze Galaxis kontrollieren will.", left:"Staat", right:"Kontrolle"},
+    {title:"Die Rebellion", text:"Eine kleine Gruppe mutiger Helden, die gegen das Imperium kämpft.", left:"Widerstand", right:"Freiheit"},
+    {title:"Der Todesstern", text:"Eine riesige Raumstation des Imperiums, die ganze Planeten zerstören kann.", left:"Waffe", right:"Gefahr"},
+    {title:"Droiden", text:"In Star Wars sind Roboter wie R2-D2 und C-3PO treue Begleiter.", left:"Technik", right:"Helfer"},
+    {title:"Aliens", text:"In jeder Ecke der Galaxis triffst du auf seltsame Lebensformen wie Wookiees.", left:"Völker", right:"Vielfalt"},
+    {title:"Lichtgeschwindigkeit", text:"Raumschiffe wie der Falke reisen schneller als das Licht durch das All.", left:"Reisen", right:"Antrieb"},
+    {title:"Die Prequels", text:"Das sind die Episoden 1 bis 3. Sie erzählen, wie aus Anakin Darth Vader wurde.", left:"Prolog", right:"Anfang"},
+    {title:"Die Sequels", text:"Die Episoden 7 bis 9 spielen viele Jahre nach dem Sieg über das Imperium.", left:"Zukunft", right:"Finale"},
+    {title:"Planeten", text:"Von Wüsten wie Tatooine bis Eiswelten wie Hoth gibt es alles.", left:"Orte", right:"Galaxis"},
+    {title:"Lichtschwerter", text:"Die traditionelle Waffe der Jedi und Sith. Jede Farbe hat eine Bedeutung.", left:"Waffe", right:"Kult"},
+    {title:"Dein Training", text:"Marco, in dieser App lernst du alles über diese Helden und Schurken.", left:"Ziel", right:"Lernen"},
+    {title:"Bist du bereit?", text:"Wähle jetzt oben eine Kategorie und werde zum Jedi-Meister!", left:"Start", right:"Bereit?"}
+  ],
+
+
+
+
+  helden: [
+    
+ {title:"Luke Skywalker", text:"Vom Farmjungen zum mächtigen Jedi-Ritter.", left:"Held", right:"Mark Hamill"},
+    {title:"Leia Organa", text:"Mutige Anführerin der Rebellion und Prinzessin.", left:"Heldin", right:"Carrie Fisher"},
+    {title:"Han Solo", text:"Schmuggler, Pilot und Held der Allianz.", left:"Pilot", right:"Harrison Ford"},
+    {title:"Obi-Wan Kenobi", text:"Ein weiser Mentor und Meister der Macht.", left:"Jedi", right:"Alec Guinness"},
+    {title:"Yoda", text:"Der 900 Jahre alte Großmeister der Jedi.", left:"Meister", right:"Frank Oz"},
+    {title:"Ahsoka Tano", text:"Die ehemalige Padawan von Anakin Skywalker.", left:"Jedi", right:"Rosario Dawson"},
+    {title:"Rey", text:"Eine Schrottsammlerin, die zur Jedi wird.", left:"Heldin", right:"Daisy Ridley"},
+    {title:"Finn", text:"Ein ehemaliger Sturmtruppler, der zum Helden wird.", left:"Rebell", right:"John Boyega"},
+    {title:"Poe Dameron", text:"Der beste Pilot des Widerstands.", left:"Pilot", right:"Oscar Isaac"},
+    {title:"Mace Windu", text:"Ein mächtiger Jedi mit einem lila Lichtschwert.", left:"Jedi", right:"Samuel L. Jackson"},
+    {title:"Padmé Amidala", text:"Königin und Senatorin von Naboo.", left:"Heldin", right:"Natalie Portman"},
+    {title:"Qui-Gon Jinn", text:"Ein unkonventioneller Jedi-Meister.", left:"Jedi", right:"Liam Neeson"},
+    {title:"Kanan Jarrus", text:"Ein Überlebender der Order 66.", left:"Jedi", right:"Freddie Prinze Jr."},
+    {title:"Ezra Bridger", text:"Ein Waisenjunge, der zum Jedi wurde.", left:"Held", right:"Taylor Gray"},
+    {title:"Hera Syndulla", text:"Die talentierte Pilotin der Ghost.", left:"Rebellin", right:"Vanessa Marshall"},
+    {title:"Cassian Andor", text:"Ein erfahrener Spion der Rebellion.", left:"Held", right:"Diego Luna"},
+    {title:"Jyn Erso", text:"Die Frau, die die Todessternpläne stahl.", left:"Heldin", right:"Felicity Jones"},
+    {title:"Cal Kestis", text:"Ein junger Jedi auf der Flucht.", left:"Jedi", right:"Cameron Monaghan"},
+    {title:"Kit Fisto", text:"Ein Nautolaner-Jedi mit einem Lächeln.", left:"Jedi", right:"Phil LaMarr"},
+    {title:"Plo Koon", text:"Entdeckte Ahsoka Tano und war ein Ratsmitglied.", left:"Jedi", right:"James Arnold Taylor"}
+ 
+
+  ],
+
+
+
+  nebendarsteller: [
+    
+{title:"R2-D2", text:"Ein tapferer kleiner Astromech-Droide.", left:"Droide", right:"Kenny Baker"},
+    {title:"C-3PO", text:"Ein Protokoll-Droide, der über 6 Millionen Sprachen spricht.", left:"Droide", right:"Anthony Daniels"},
+    {title:"Chewbacca", text:"Treuer Wookiee-Copilot des Millennium Falken.", left:"Wookiee", right:"Peter Mayhew"},
+
+{title:"R2-D2", text:"Ein tapferer kleiner Astromech-Droide.", left:"Droide", right:"Kenny Baker"},
+
+    {title:"C-3PO", text:"Ein Protokoll-Droide, der über 6 Millionen Sprachen spricht.", left:"Droide", right:"Anthony Daniels"},
+    {title:"Chewbacca", text:"Treuer Wookiee-Copilot des Millennium Falken.", left:"Wookiee", right:"Peter Mayhew"},
+    {title:"Lando Calrissian", text:"Der charmante ehemalige Besitzer des Falken.", left:"Baron", right:"Billy Dee Williams"},
+    {title:"Admiral Ackbar", text:"Bekannt für den Ausspruch: Es ist eine Falle!", left:"Admiral", right:"Erik Bauersfeld"},
+    {title:"Boba Fett", text:"Der berüchtigtste Kopfgeldjäger der Galaxis.", left:"Jäger", right:"Jeremy Bulloch"},
+    {title:"Jabba der Hutte", text:"Ein mächtiger Gangsterboss auf Tatooine.", left:"Boss", right:"Puppenspieler"},
+    {title:"Wedge Antilles", text:"Überlebte beide Angriffe auf den Todesstern.", left:"Pilot", right:"Denis Lawson"},
+    {title:"Mon Mothma", text:"Die politische Anführerin der Rebellion.", left:"Senatorin", right:"Caroline Blakiston"},
+    {title:"Grogu", text:"Das Kind, das eine starke Verbindung zur Macht hat.", left:"Kind", right:"Animatronic"},
+    {title:"Darth Maul", text:"Sith mit dem Doppelklingen-Lichtschwert.", left:"Sith", right:"Ray Park"},
+    {title:"Count Dooku", text:"Ein ehemaliger Jedi und Anführer der Separatisten.", left:"Sith", right:"Christopher Lee"},
+    {title:"General Grievous", text:"Ein Cyborg mit vier Lichtschwertern.", left:"Cyborg", right:"Matthew Wood"},
+    {title:"Grand Moff Tarkin", text:"Der Kommandant des ersten Todessterns.", left:"Imperium", right:"Peter Cushing"},
+    {title:"Greedo", text:"Der Kopfgeldjäger, der zuerst schießen wollte.", left:"Alien", right:"Paul Blake"},
+    {title:"Wicket", text:"Der tapfere Ewok von Endor.", left:"Ewok", right:"Warwick Davis"},
+    {title:"Captain Phasma", text:"Anführerin der Sturmtruppen der Ersten Ordnung.", left:"Erste Ordnung", right:"Gwendoline Christie"},
+    {title:"Maz Kanata", text:"Eine über 1000 Jahre alte Piratin.", left:"Alien", right:"Lupita Nyong'o"},
+    {title:"Hondo Ohnaka", text:"Ein liebenswürdiger Piraten-Anführer.", left:"Pirat", right:"Jim Cummings"},
+    {title:"Babu Frik", text:"Ein winziger Droiden-Schmied.", left:"Alien", right:"Shirley Henderson"}
+  ],
+
+
+
+
+  zitate: [
+    {title:"Meister Yoda", text:"Tu es oder tu es nicht. Es gibt kein Versuchen.", left:"Zitat", right:"Yoda"},
+    {title:"Darth Vader", text:"Ich bin dein Vater.", left:"Zitat", right:"Vader"},
+    {title:"Leia Organa", text:"Hilf mir, Obi-Wan Kenobi. Du bist meine letzte Hoffnung.", left:"Zitat", right:"Leia"},
+
+ {title:"Han Solo", text:"Sag mir nie, wie meine Chancen stehen!", left:"Zitat", right:"Han"},
+    {title:"Darth Vader", text:"Ich finde deinen Mangel an Glauben beklagenswert.", left:"Zitat", right:"Vader"},
+    {title:"Mandalorian", text:"Das ist der Weg.", left:"Zitat", right:"Mando"},
+    {title:"Qui-Gon Jinn", text:"Deine Konzentration bestimmt deine Realität.", left:"Zitat", right:"Qui-Gon"},
+    {title:"Admiral Ackbar", text:"Es ist eine Falle!", left:"Zitat", right:"Ackbar"},
+    {title:"Kanzler Palpatine", text:"Unbegrenzte Macht!", left:"Zitat", right:"Palpatine"},
+    {title:"Obi-Wan Kenobi", text:"Möge die Macht mit dir sein. Immer.", left:"Zitat", right:"Obi-Wan"},
+ 
+{title:"Meister Yoda", text:"Tu es oder tu es nicht. Es gibt kein Versuchen.", left:"Lehre", right:"Yoda"},
+    {title:"Meister Yoda", text:"Viel zu lernen du noch hast.", left:"Lehre", right:"Yoda"},
+    {title:"Meister Yoda", text:"Furcht ist der Pfad zur dunklen Seite. Furcht führt zu Wut, Wut führt zu Hass, Hass führt zu Leid.", left:"Warnung", right:"Yoda"},
+    {title:"Meister Yoda", text:"Nach meiner Größe beurteilst du mich? Tust du das?", left:"Weisheit", right:"Yoda"},
+    {title:"Meister Yoda", text:"Ein Jedi nutzt die Macht für das Wissen. Niemals zum Angriff.", left:"Kodex", right:"Yoda"},
+    {title:"Meister Yoda", text:"Dich stets auf deine Gefühle verlassen du musst.", left:"Instinkt", right:"Yoda"},
+    {title:"Meister Yoda", text:"Schwer zu sehen. Immer in Bewegung die Zukunft ist.", left:"Vision", right:"Yoda"},
+    {title:"Meister Yoda", text:"Der größte Lehrer Versagen ist.", left:"Lektion", right:"Yoda"},
+    {title:"Meister Yoda", text:"Vergessen du musst, was du früher gelernt hast.", left:"Neuanfang", right:"Yoda"},
+    {title:"Meister Yoda", text:"Möge die Macht mit dir sein. Immer.", left:"Abschied", right:"Yoda"}
+  
+
+  ],
+
+
+  schlachten: [
+    {title:"Schlacht von Yavin", text:"Der Sieg der Rebellen und die Zerstörung des Todessterns.", left:"Schlacht", right:"Sieg"},
+
+  {title:"Schlacht von Hoth", text:"Ein schwerer Rückschlag für die Rebellen auf dem Eisplaneten.", left:"Schlacht", right:"Rückzug"},
+    {title:"Schlacht von Endor", text:"Der finale Sieg über das Imperium.", left:"Schlacht", right:"Sieg"},
+    {title:"Schlacht von Scarif", text:"Die Mission zur Beschaffung der Todessternpläne.", left:"Schlacht", right:"Opfer"},
+    {title:"Schlacht von Geonosis", text:"Der Beginn der Klonkriege.", left:"Schlacht", right:"Krieg"},
+    {title:"Schlacht von Coruscant", text:"Eine riesige Raumschlacht über der Hauptstadt.", left:"Schlacht", right:"Rettung"},
+    {title:"Schlacht von Naboo", text:"Der Kampf gegen die Handelsföderation.", left:"Schlacht", right:"Befreiung"},
+    {title:"Schlacht von Crait", text:"Der Widerstand gegen die Erste Ordnung auf dem Salzplaneten.", left:"Schlacht", right:"Flucht"},
+    {title:"Schlacht von Exegol", text:"Der endgültige Kampf gegen die Sith-Flotte.", left:"Schlacht", right:"Finale"},
+    {title:"Schlacht von Kamino", text:"Der Angriff auf die Heimat der Kloner.", left:"Schlacht", right:"Verteidigung"}
+
+
+  ],
+
+
+  quiz: [
+ 
+
+  {title:"Frage", text:"Ist Obi-Wan Kenobi ein Jedi-Meister?", type:"quiz", answer:true, left:"Test", right:"Prüfung"},
+    {title:"Frage", text:"Ist Darth Vader ein Protokolldroide?", type:"quiz", answer:false, left:"Test", right:"Prüfung"},
+    {title:"Frage", text:"Nutzt ein Jedi ein Lichtschwert?", type:"quiz", answer:true, left:"Test", right:"Prüfung"},
+    {title:"Frage", text:"Kann Han Solo die Macht nutzen?", type:"quiz", answer:false, left:"Test", right:"Prüfung"},
+    {title:"Frage", text:"Ist Chewbacca ein Wookiee?", type:"quiz", answer:true, left:"Test", right:"Prüfung"},
+    {title:"Frage", text:"Kommt Anakin von der Erde?", type:"quiz", answer:false, left:"Test", right:"Prüfung"},
+    {title:"Frage", text:"Ist R2-D2 ein Astromech-Droide?", type:"quiz", answer:true, left:"Test", right:"Prüfung"},
+    {title:"Frage", text:"Ist Yoda ein Sith-Lord?", type:"quiz", answer:false, left:"Test", right:"Prüfung"},
+    {title:"Frage", text:"Hat das Imperium den Todesstern gebaut?", type:"quiz", answer:true, left:"Test", right:"Prüfung"},
+    {title:"Frage", text:"Ist Luke Skywalker der Sohn von Vader?", type:"quiz", answer:true, left:"Test", right:"Prüfung"}
+ 
+
+  ],
+
+
+
+  philosophie: [
+
+ {title:"Die Macht", text:"Ein Energiefeld, das die Galaxis zusammenhält.", left:"Lehre", right:"Macht"},
+    {title:"George Lucas", text:"Der Schöpfer und Visionär von Star Wars.", left:"Regie", right:"Kreativ"},
+    {title:"John Williams", text:"Der Komponist der legendären Filmmusik.", left:"Musik", right:"Klassik"},
+    {title:"Mark Hamill", text:"Spielte die Rolle des Luke Skywalker.", left:"Cast", right:"Luke"},
+    {title:"Harrison Ford", text:"Spielte den Schmuggler Han Solo.", left:"Cast", right:"Han"},
+    {title:"Carrie Fisher", text:"Spielte die tapfere Prinzessin Leia.", left:"Cast", right:"Leia"},
+    {title:"ILM", text:"Die Firma für die Spezialeffekte.", left:"Technik", right:"Effekte"},
+    {title:"Das Lichtschwert", text:"Eine elegante Waffe aus einer zivilisierteren Zeit.", left:"Waffe", right:"Jedi"},
+    {title:"Der Millenium Falke", text:"Das schnellste Schrottschiff der Galaxis.", left:"Schiff", right:"Solo"},
+    {title:"Tatooine", text:"Der Wüstenplanet, auf dem alles begann.", left:"Ort", right:"Heimat"},
+    {title:"Die Klonkriege", text:"Eine animierte Serie, die die Lücke füllt.", left:"TV", right:"Serie"},
+    {title:"The Mandalorian", text:"Die erste Realserie aus dem Star Wars Universum.", left:"TV", right:"Disney+"},
+    {title:"James Earl Jones", text:"Die legendäre Stimme von Darth Vader.", left:"Stimme", right:"Vader"},
+    {title:"Ewan McGregor", text:"Spielte den jungen Obi-Wan Kenobi.", left:"Cast", right:"Obi-Wan"},
+    {title:"Frank Oz", text:"Der Puppenspieler und die Stimme von Yoda.", left:"Cast", right:"Yoda"},
+    {title:"Die helle Seite", text:"Steht für Wissen, Frieden und Gelassenheit.", left:"Lehre", right:"Licht"},
+    {title:"Die dunkle Seite", text:"Steht für Zorn, Angst und Aggression.", left:"Lehre", right:"Schatten"}
+ 
+
+  ]
+};
+
+
+
+
+let activeDeck = decks.willkommen;
+let currentIndex = 0;
+let audioCtx = null;
+
+const cardTitle = document.getElementById('cardTitle');
+const cardText = document.getElementById('cardText');
+const leftInfo = document.getElementById('leftInfo');
+const rightInfo = document.getElementById('rightInfo');
+const cardNumber = document.getElementById('cardNumber');
+const quizControls = document.getElementById('quizControls');
+
+
+
+
+
+function getAudioContext() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+}
+
+
+
+
+function playMainTheme() {
+    const ctx = getAudioContext();
+    const startTime = ctx.currentTime;
+    const melody = [392, 587, 523, 494, 440, 784, 587];
+    const durations = [0.5, 0.5, 0.15, 0.15, 0.15, 0.5, 0.8];
+    let playTime = startTime;
+    melody.forEach((f, i) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'square'; osc.frequency.setValueAtTime(f, playTime);
+        g.gain.setValueAtTime(0.04, playTime);
+        g.gain.exponentialRampToValueAtTime(0.0001, playTime + durations[i]);
+        osc.connect(g); g.connect(ctx.destination);
+        osc.start(playTime); osc.stop(playTime + durations[i]);
+        playTime += durations[i] + 0.05;
+    });
+}
+
+
+function playVaderTheme() {
+    const ctx = getAudioContext();
+    const startTime = ctx.currentTime;
+    const notes = [440, 440, 440, 349, 523, 440];
+    const rhythm = [0.5, 0.5, 0.5, 0.3, 0.1, 0.6];
+    let playTime = startTime;
+    notes.forEach((f, i) => {
+        const osc = ctx.createOscillator();
+        const g = ctx.createGain();
+        osc.type = 'sawtooth'; osc.frequency.setValueAtTime(f/2, playTime);
+        g.gain.setValueAtTime(0.07, playTime);
+        g.gain.exponentialRampToValueAtTime(0.0001, playTime + rhythm[i]);
+        osc.connect(g); g.connect(ctx.destination);
+        osc.start(playTime); osc.stop(playTime + rhythm[i]);
+        playTime += rhythm[i] + 0.05;
+    });
+}
+
+
+
+
+function setDeck(name){
+  activeDeck = decks[name] || decks.willkommen;
+  currentIndex = 0;
+  showCard(true);
+}
+
+function showCard(autoRead = false){
+  const c = activeDeck[currentIndex];
+  cardTitle.style.display = (c.type === "quiz") ? "none" : "block";
+  cardTitle.textContent = c.title || "";
+  cardText.textContent = c.text;
+  leftInfo.textContent = c.left;
+  rightInfo.textContent = c.right;
+  cardNumber.textContent = `${currentIndex + 1} / ${activeDeck.length}`;
+  quizControls.style.display = (c.type === "quiz") ? "flex" : "none";
+  
+  if(currentIndex === 0 && activeDeck === decks.willkommen) {
+      playMainTheme();
+      if(autoRead) setTimeout(readCard, 4000); 
+  } else if(c.title === "Darth Vader") {
+      playVaderTheme();
+      if(autoRead) setTimeout(readCard, 4000);
+  } else {
+      if(autoRead) readCard();
+  }
+}
+
+function handleCardClick(){
+  if(activeDeck[currentIndex].type === "quiz") return;
+  nextCard();
+}
+
+function nextCard(){
+  if(currentIndex < activeDeck.length - 1) {
+      currentIndex++;
+      showCard(true);
+  } else {
+      if(activeDeck === decks.quiz) {
+          setDeck('willkommen');
+      } else {
+          currentIndex = 0;
+          showCard(true);
+      }
+  }
+}
+
+function prevCard(){
+  if(currentIndex > 0) currentIndex--;
+  else currentIndex = activeDeck.length - 1;
+  showCard(true);
+}
+
+
+
+
+function readCard(){
+  window.speechSynthesis.cancel();
+  const c = activeDeck[currentIndex];
+  let textToRead = (c.type === "quiz") ? c.text : c.title + ". " + c.text;
+  const msg = new SpeechSynthesisUtterance(textToRead);
+  msg.lang = "de-DE";
+  window.speechSynthesis.speak(msg);
+}
+
+
+
+
+function answerQuiz(isYes){
+  const c = activeDeck[currentIndex];
+  const isLastCard = (currentIndex === activeDeck.length - 1);
+  
+  if(isYes === c.answer){
+    let speechFeedback = "Richtig!";
+    if(isLastCard) {
+      cardText.textContent = "Die Macht ist stark in dir! Du hast die Prüfung bestanden. Zurück zur Startseite.";
+      speechFeedback = "Richtig! Die Macht ist stark in dir! Du hast die Prüfung bestanden. Wir kehren nun zur Startseite zurück.";
+    } else {
+      cardText.textContent = "RICHTIG!";
+    }
+    
+    const msg = new SpeechSynthesisUtterance(speechFeedback);
+    msg.lang = "de-DE";
+    if(isLastCard) {
+        msg.onend = function() { setTimeout(() => setDeck('willkommen'), 1000); };
+    }
+    window.speechSynthesis.speak(msg);
+    if(!isLastCard) { setTimeout(nextCard, 1500); }
+  } else {
+    cardText.textContent = "LEIDER FALSCH!";
+    const msg = new SpeechSynthesisUtterance("Leider falsch.");
+    msg.lang = "de-DE";
+    window.speechSynthesis.speak(msg);
+  }
+}
+
+
+
+
+showCard(false);
+</script>
+</body>
+</html>
