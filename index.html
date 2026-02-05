@@ -455,8 +455,8 @@ function getAudioContext() {
 function playMainTheme() {
     const ctx = getAudioContext();
     const startTime = ctx.currentTime;
-    const melody = [392, 587, 523, 494, 440, 784, 587, 523, 494, 440, 784, 587];
-    const durations = [0.5, 0.5, 0.15, 0.15, 0.15, 0.5, 0.8, 0.15, 0.15, 0.15, 0.5, 0.8];
+    const melody = [392, 587, 523, 494, 440, 784, 587, 523, 494, 440, 784];
+    const durations = [0.5, 0.5, 0.15, 0.15, 0.15, 0.5, 0.8, 0.15, 0.15, 0.15, 0.5];
     let playTime = startTime;
     melody.forEach((f, i) => {
         const osc = ctx.createOscillator();
@@ -474,8 +474,8 @@ function playMainTheme() {
 function playVaderTheme() {
     const ctx = getAudioContext();
     const startTime = ctx.currentTime;
-    const notes = [440, 440, 440, 349, 523, 440, 349, 349, 523, 440, 523];
-    const rhythm = [0.5, 0.5, 0.5, 0.3, 0.1, 0.6, 0.3, 0.3, 0.1, 0.5, 0.6];
+    const notes = [440, 440, 440, 349, 523, 440, 349, 349];
+    const rhythm = [0.5, 0.5, 0.5, 0.3, 0.1, 0.6, 0.3, 0.3];
     let playTime = startTime;
     notes.forEach((f, i) => {
         const osc = ctx.createOscillator();
